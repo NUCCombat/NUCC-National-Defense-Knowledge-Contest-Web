@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/ekko-lightbox/css/ekko-lightbox.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/lightbox2-master/css/lightbox.min.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    <link rel="stylesheet" href="../../../assets/css/pages/gallery.css">
+
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    
+    <style type="text/css">
+	.yulantu{
+		z-index: 9999999999999999;
+		position:absolute;
+		border:3px solid #438EB9;
+		display: none;
+	}
+	.grid figure {
+	  position: relative;
+	  float: left;
+	  overflow: hidden;
+	  margin: 10px 1%;
+	  min-width: 100px;
+	  max-width: 200px;
+	  max-height: 120px;
+	  width: 100%;
+	  height: auto;
+	  background: #3085a3;
+	  text-align: center;
+	  cursor: pointer;
+	}
+	</style>
+
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+
+								<template v-if="!isShow">
+							    <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+         
+										<!-- 检索  -->
+										<div style="padding-left: 20px;padding-top: 15px;">
+										<table style="margin-top:5px;">
+											<tr>
+												<td>
+							                        <div class="input-group input-group-sm mb-3">
+	                                                	<input class="form-control" type="text" v-model="KEYWORDS" placeholder="这里输入关键词" />
+	                                            	</div>
+												</td>
+												<td style="vertical-align:top;padding-left:5px;">
+													<a class="btn btn-light btn-sm" v-on:click="getList(PICTURE_ID)" style="width: 23px;height:30px;margin-top:1px;" title="检索"><i style="margin-top:-3px;margin-left: -6px;"  class="feather icon-search"></i></a>
+												</td>
+												<td v-show="loading">
+												<!-- [加载状态 ] start -->
+										    	<div class="d-flex justify-content-center" style="margin-top:-10px;">
+		                                            <div class="spinner-grow spinner-grow-sm" role="status">
+		                                                <span class="sr-only">Loading...</span>
+		                                            </div>
+		                                        </div>
+										    	<!-- [ 加载状态  ] End -->
+												</td>
+											</tr>
+										</table>
+										</div>
+										<!-- 检索  -->
+										<div class="card-block table-border-style" style="margin-top: -15px">
+                                			<div class="table-responsive">
+                                    			<table class="table table-hover">
+													<thead>
+														<tr>
+															<th v-show="'0' != PICTURE_ID" style="width: 50px;" id="cts">
+								                            <div class="checkbox d-inline">
+	                                                            <input type="checkbox" name="fhcheckbox" id="zcheckbox">
+	                                                            <label  style="max-height: 12px;" for="zcheckbox" class="cr"></label>
+	                                                        </div>
+															</th>
+															<th style="width:50px;">NO</th>
+															<th>{{'0' == PICTURE_ID?'目录名':'图片名'}}</th>
+															<template v-if="'0' != PICTURE_ID"><th>图片大小</th></template>
+															<th>{{'0' == PICTURE_ID?'创建时间':'上传时间'}}</th>
+															<template v-if="'0' != PICTURE_ID">
+															<th>上传者</th>
+															</template>
+															<th>备注说明</th>
+															<th>操作</th>
+														</tr>
+													</thead>
+																			
+													<tbody>
+														<!-- 开始循环 -->	
+														<template v-for="(data,index) in varList">
+																<tr>
+																	<td v-show="'0' != PICTURE_ID">
+			                                                        	<div class="checkbox d-inline">
+			                                                            	<input type="checkbox" v-bind:id="'zcheckbox'+index" name='ids' v-bind:value="data.PICTURE_ID">
+			                                                            	<label  style="max-height: 12px;" v-bind:for="'zcheckbox'+index" class="cr"></label>
+			                                                        	</div>
+																	</td>
+																	<td>{{page.showCount*(page.currentPage-1)+index+1}}</td>
+																	<template v-if="'0' == PICTURE_ID">
+																	<td><a v-on:click="getList(data.PICTURE_ID)" style="cursor:pointer;">{{data.NAME}} <i class="feather icon-chevron-down"></i></a>
+																		<span class="green" style="cursor: pointer;">
+																			<i class="feather icon-edit" title="修改目录名" v-on:click="openEdit('titlew'+(index+1),'title'+(index+1))"></i>
+																		</span>
+																		<div v-bind:id="'titlew'+(index+1)" style="z-index: 9999999999999999;position:absolute;display: none;margin-top: 2px;">
+																            <div class="input-group input-group-sm mb-3">
+											                                    <input type="text" class="form-control" v-bind:id="'title'+(index+1)" v-bind:value="data.NAME" maxlength="30" placeholder="这里输入目录名" title="目录名" style="max-height: 22px;">
+											                                    <a title="保存" v-on:click="toEdit(data.PICTURE_ID,(index+1))" style="cursor:pointer;float: right;margin-left: 5px;"><i class="feather icon-check"></i></a>
+											                                    <a title="取消" v-on:click="closeEdit('titlew'+(index+1))" style="cursor:pointer;float: right;"><i class="feather icon-x"></i></a>
+											                                </div>
+																	    </div>
+																	</td>
+																	</template>
+																	<template v-if="'0' != PICTURE_ID">
+																	<td>
+																		<img style="margin-top: -3px; width: 20px;cursor:pointer;" v-bind:alt="data.NAME" v-bind:src="serverurl+data.FILEPATH" v-on:mouseover="showImg(serverurl+data.FILEPATH,'yulantu'+(index+1));" v-on:mouseout="hideImg('yulantu'+(index+1));">
+																		{{data.NAME}}&nbsp;
+																		<div class="yulantu" v-bind:id="'yulantu'+(index+1)"></div>
+																		<span class="green" style="cursor: pointer;">
+																			<i class="feather icon-edit" title="修改图片名" v-on:click="openEdit('titlew'+(index+1),'title'+(index+1))"></i>
+																		</span>
+																		<div v-bind:id="'titlew'+(index+1)" style="z-index: 9999999999999999;position:absolute;display: none;margin-top: 2px;">
+																            <div class="input-group input-group-sm mb-3">
+											                                    <input type="text" class="form-control" v-bind:id="'title'+(index+1)" v-bind:value="data.NAME" maxlength="30" placeholder="这里输入图片名" title="图片名" style="max-height: 22px;">
+											                                    <a title="保存" v-on:click="toEdit(data.PICTURE_ID,(index+1))" style="cursor:pointer;float: right;margin-left: 5px;"><i class="feather icon-check"></i></a>
+											                                    <a title="取消" v-on:click="closeEdit('titlew'+(index+1))" style="cursor:pointer;float: right;"><i class="feather icon-x"></i></a>
+											                                </div>
+																	    </div>
+																	</td>
+																	</template>
+																	<template v-if="'0' != PICTURE_ID">
+																	<td>
+																		{{data.FILESIZE > 1024 ? ((((data.FILESIZE)/1024)+'').substring(0,(((data.FILESIZE)/1024)+'').lastIndexOf('.')+3))+' MB' : data.FILESIZE + ' KB'}}
+																	</td>
+																	</template>
+																	<td>{{data.CTIME}}</td>
+																	<template v-if="'0' != PICTURE_ID">
+																	<td>{{data.UNAME}}</td>
+																	</template>
+																	<td>{{data.REMARKS}}
+																		<span class="green" style="cursor: pointer;">
+																			<i class="feather icon-edit" title="修改备注" v-on:click="openEdit('remarksw'+(index+1),'remarks'+(index+1))"></i>
+																		</span>
+																		<div v-bind:id="'remarksw'+(index+1)" style="z-index: 9999999999999999;position:absolute;display: none;margin-top: 2px;">
+																            <div class="input-group input-group-sm mb-3">
+											                                    <input type="text" class="form-control" v-bind:id="'remarks'+(index+1)" v-bind:value="data.REMARKS" maxlength="30" placeholder="这里输入备注" title="备注" style="max-height: 22px;">
+											                                    <a title="保存" v-on:click="toEdit(data.PICTURE_ID,(index+1))" style="cursor:pointer;float: right;margin-left: 5px;"><i class="feather icon-check"></i></a>
+											                                    <a title="取消" v-on:click="closeEdit('remarksw'+(index+1))" style="cursor:pointer;float: right;"><i class="feather icon-x"></i></a>
+											                                </div>
+																	    </div>
+																	</td>
+																	<td>
+																		<a v-show="'0' != PICTURE_ID" title="下载" v-on:click="downloadFile(data.PICTURE_ID)" style="cursor:pointer;"><i class="mdi mdi-cloud-download"></i></a></a>
+									                 					<a v-show="del" title="删除" v-on:click="goDel(data.PICTURE_ID,data.FILEPATH)" style="cursor:pointer;"><i class="feather icon-x"></i></a>
+																	</td>
+																</tr>
+														</template>
+														<tr v-show="varList.length==0">
+															<td colspan="10">没有相关数据</td>
+														</tr>
+													</tbody>
+												</table>
+												
+												<table style="width:100%;margin-top:15px;">
+													<tr>
+														<td style="vertical-align:top;">
+															<template v-if="'0' == PICTURE_ID">
+															<a v-show="add" class="btn btn-light btn-sm" v-on:click="goAdd(PICTURE_ID,155,'创建目录')">创建目录</a>
+															</template>
+															<template v-if="'0' != PICTURE_ID">
+															<a v-show="add" class="btn btn-light btn-sm" v-on:click="goUpload(PICTURE_ID,true)">批量上传</a>
+															<a v-show="del" class="btn btn-light btn-sm" v-on:click="makeAll('确定删除选中的图片吗?')">批量删除</a>
+															<a class="btn btn-light btn-sm" v-on:click="getList(PARENT_ID)">返回</a>
+															</template>
+														</td>
+														<td style="vertical-align:top;"><div style="float: right;padding-top: 0px;margin-top: 0px;" v-html="page.pageStr"></div></td>
+													</tr>
+												</table>
+											</div>
+                                		</div>	
+			
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                                </template>
+                                
+                                <template v-if="'0' != PICTURE_ID && !isShow">
+                                <!-- [ Image-Gallery ] start -->
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5>图片</h5>
+                                        </div>
+                                        <div class="card-block">
+                                            <div class="row text-center">
+                                            	<!-- 开始循环 -->	
+												<template v-for="(data,index) in varList">
+                                                <div class="col-xl-2 col-lg-3 col-sm-4 col-xs-12">
+                                                    <a v-bind:href="serverurl+data.FILEPATH" data-toggle="lightbox" data-gallery="example-gallery"><img v-bind:src="serverurl+data.FILEPATH" class="img-fluid m-b-10" v-bind:alt="data.NAME" v-bind:title="data.NAME"></a>
+                                                </div>
+                                               </template>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- [ Image-Gallery ] end -->
+                                </template>
+                                
+                                <template v-if="'0' == PICTURE_ID && isShow">
+                                <div class="col-xl-12">
+                                    <!-- [ Main Content ] start -->
+		                            <div class="row">
+		                                <div class="col-sm-12">
+		                                    <div class="card">
+		                                        <div class="card-header">
+		                                            <h6><i class="mdi mdi-arrow-left-bold"></i>  请先点击左侧的目录  (没有的话先去图片库中创建)</h6>
+		                                        </div>
+		                                    </div>
+		                                </div>
+		                            </div>
+		                            <!-- [ Main Content ] end -->
+                                </div>                                
+                                </template>
+                                
+                                <template v-if="'0' != PICTURE_ID && isShow">
+                                <div class="col-sm-12">
+	                               <div class="card">
+	                                   <div class="card-block" style="padding-top: 1px;padding-left: 37px;">
+	                                       <div class="grid">
+	                                       	<!-- 开始循环 -->	
+											<template v-for="(data,index) in varList">
+	                                           <figure class="effect-jazz" v-on:click="fix(serverurl+data.FILEPATH)" >
+	                                               <img v-bind:src="serverurl+data.FILEPATH" v-bind:alt="data.NAME" />
+	                                               <figcaption>
+	                                                   <p>{{data.NAME}}</p>
+	                                               </figcaption>
+	                                           </figure>
+	                                           </template>
+	                                       </div>
+	                                   </div>
+	                                   <table style="width:100%;margin-top:15px;">
+											<tr>
+												<td style="vertical-align:top;padding-left: 15px;">
+													<a v-show="add" class="btn btn-light btn-sm" v-on:click="goUpload(PICTURE_ID,false)">上传图片</a>
+												</td>
+												<td style="vertical-align:top;"><div style="float: right;padding-top: 0px;margin-top: 0px;" v-html="page.pageStr"></div></td>
+											</tr>
+										</table>
+	                               </div>
+	                            </div>
+								</template>
+								
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<script src="../../../assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- ekko-lightbox Js -->
+<script src="../../../assets/plugins/ekko-lightbox/js/ekko-lightbox.min.js"></script>
+<script src="../../../assets/plugins/lightbox2-master/js/lightbox.min.js"></script>
+<script src="../../../assets/js/pages/ac-lightbox.js"></script>
+
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/exam/picture_list.js"></script>
+
+</body>
+</html>

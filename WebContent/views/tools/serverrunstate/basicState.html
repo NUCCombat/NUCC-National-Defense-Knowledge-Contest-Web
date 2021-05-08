@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <script src="../../../plugins/echarts/echarts.min.js"></script>
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+
+</head>
+
+<body style="background-color: white">
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+									
+								   <div class="col-sm-12">
+	                                    <div class="card">
+	                                        <div class="card-header">
+	                                            <h5>操作系统基本信息  内存 CPU 硬盘 使用状态</h5>
+	                                        </div>
+	                                        <div class="card-block" style="background-color: #1B1B1B">
+	                                            <table style="width: 100%;">
+		                                            <tr align="center">
+			                                            <td>
+			                                            	<div id="main" style="width: 1100px;;height:500px;margin-top: -25px;"></div>
+			                                            	<div v-show="loading"><font color="white" size="5">正在读取,请稍后...</font></div>
+			                                            </td>
+		                                            </tr>
+	                                            </table>
+	                                            <table style="width: 100%;color: white;" class="table table-bordered mb-0">
+		                                            <tr>
+			                                            <td>计算机用户：{{pd.userName}}</td>
+			                                            <td>本地IP地址：{{pd.IP}}</td>
+			                                            <td>本地主机名：{{pd.HostName}}</td>
+		                                            </tr>
+		                                            <tr>
+			                                            <td>JVM可用处理器数：{{pd.availableProcessors}}</td>
+			                                            <td>JDK版本：{{pd.javaversion}}</td>
+			                                            <td>JDK路径：{{pd.javahome}}</td>
+		                                            </tr>
+		                                            <tr>
+			                                            <td>虚拟机规范版本：{{pd.javavmversion}}</td>
+			                                            <td>虚拟机实现名称：{{pd.javavmname}}</td>
+			                                            <td>Java类格式版本：{{pd.javaclassversion}}</td>
+		                                            </tr>
+		                                            <tr>
+			                                            <td>操作系统的构架：{{pd.osarch}}</td>
+			                                            <td colspan="2">当前工作目录：{{pd.userdir}}</td>
+		                                            </tr>
+	                                            </table>
+	                                        </div>
+	                                    </div>
+	                                    
+	                               </div>
+									
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+
+
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/tools/basicState.js"></script>
+
+</body>
+</html>

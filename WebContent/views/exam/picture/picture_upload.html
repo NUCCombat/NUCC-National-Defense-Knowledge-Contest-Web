@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+</head>
+
+<body tabindex="1" class="loadingInProgress">
+    
+<script type="text/javascript">
+ 
+   	var PICTURE_ID = getUrlKey('PICTURE_ID');	//目录ID
+ 
+ 	//根据url参数名称获取参数值
+    function getUrlKey (name) {
+        return decodeURIComponent(
+            (new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
+    }
+   	
+   	//调用服务端上传插件
+	window.location.href = httpurl+'plugins/webuploader/index.html?FH_ID='+PICTURE_ID+'&RM=picture/uploadAll';
+	
+</script>
+    
+</body>
+
+</html>

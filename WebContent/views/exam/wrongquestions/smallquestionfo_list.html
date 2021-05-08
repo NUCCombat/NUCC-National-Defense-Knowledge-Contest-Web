@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/modal-window-effects/css/md-modal.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+
+							    <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+									
+									<div class="card-header" style="padding-top: 20px;">
+                                        <h5>错题列表(小题)</h5>
+                                    </div>
+									
+									<!-- 检索  -->
+									<div style="padding-left: 20px;padding-top: 10px;">
+									<table style="margin-top:5px;">
+										<tr>
+											<td>
+						                        <div class="input-group input-group-sm mb-3">
+                                                	<input class="form-control" type="text" v-model="KEYWORDS" placeholder="这里输入关键词" />
+                                            	</div>
+											</td>
+											<td style="vertical-align:top;padding-left:5px;">
+												<a class="btn btn-light btn-sm" v-on:click="getList" style="width: 23px;height:30px;margin-top:1px;" title="检索"><i style="margin-top:-3px;margin-left: -6px;"  class="feather icon-search"></i></a>
+											</td>
+											<td v-show="loading">
+												<!-- [加载状态 ] start -->
+										    	<div class="d-flex justify-content-center" style="margin-top:-10px;">
+		                                            <div class="spinner-grow spinner-grow-sm" role="status">
+		                                                <span class="sr-only">Loading...</span>
+		                                            </div>
+		                                        </div>
+										    	<!-- [ 加载状态  ] End -->
+											</td>
+										</tr>
+									</table>
+									</div>
+									<!-- 检索  -->
+									<div class="card-block table-border-style" style="margin-top: -29px">
+                                    	<div class="table-responsive">
+                                        	<table class="table table-hover">
+												<thead>
+													<tr>
+														<th style="width:50px;">NO</th>
+														<th>试题类型</th>
+														<th>试题标题</th>
+														<th>你的答案</th>
+														<th>正确答案</th>
+													</tr>
+												</thead>
+																		
+												<tbody>
+													<!-- 开始循环 -->	
+													<template v-for="(data,index) in varList">
+														<tr>
+															<td scope="row">{{page.showCount*(page.currentPage-1)+index+1}}</td>
+															<td>
+																{{data.TYPE=='A'?"单选题":""}}
+																{{data.TYPE=='B'?"多选题":""}}
+																{{data.TYPE=='C'?"判断题":""}}
+															</td>
+															<td>
+																<template v-if="data.TYPE=='A'">{{(data.TITLE1).substring(0,30)}}...</template>
+																<template v-if="data.TYPE=='B'">{{(data.TITLE2).substring(0,30)}}...</template>
+																<template v-if="data.TYPE=='C'">{{(data.TITLE3).substring(0,30)}}...</template>
+																<template v-if="data.TYPE=='C'"><a title="查看题目" v-on:click="viewQue(data.TYPE,data.QUESTIONS_ID,data.USERANSWER == 'true'?'正确':'错误')" style="cursor:pointer;"><i class="feather icon-search"></i></a></template>
+																<template v-if="data.TYPE!='C'"><a title="查看题目" v-on:click="viewQue(data.TYPE,data.QUESTIONS_ID,data.USERANSWER)" style="cursor:pointer;"><i class="feather icon-search"></i></a></template>
+															</td>
+															<td>
+																<template v-if="data.TYPE!='C'">{{data.USERANSWER}}</template>
+																<template v-if="data.TYPE=='C'">
+																	{{data.USERANSWER == 'true'?'正确':'错误'}}
+																</template>
+															</td>
+															<td>
+																<template v-if="data.TYPE!='C'">{{data.CORRECTANSWER}}</template>
+																<template v-if="data.TYPE=='C'">
+																	{{data.CORRECTANSWER == 'true'?'正确':'错误'}}
+																</template>
+															</td>
+														</tr>
+													</template>
+													<tr v-show="varList.length==0">
+														<td colspan="10">没有相关数据</td>
+													</tr>
+												</tbody>
+											</table>
+											<table style="width:100%;margin-top:15px;">
+												<tr>
+													<td style="vertical-align:top;">
+														<button id="viewquetion" data-modal="modal-15" style="margin-left: 10px;display: none;" type="button" class="btn btn-secondary btn-sm md-trigger"></button>
+													</td>
+													<td style="vertical-align:top;"><div style="float: right;padding-top: 0px;margin-top: 0px;" v-html="page.pageStr"></div></td>
+												</tr>
+											</table>
+										</div>
+                                    </div>
+			
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+
+								<div class="col-sm-12" style="margin-top: -13px;">
+	                                 <div class="card">
+	                                     <div class="card-header">
+	                                         <h5>错题列表(大题)</h5>
+	                                     </div>
+	                                     <div class="card-block">
+											<div style="margin-top: -29px;width: 100%;">
+												<iframe name="treeFrame" id="treeFrame" frameborder="0" src="bigquestionfo_list.html" style="margin:0 auto;width:100%;height:780px;"></iframe>
+											</div>
+	                                     </div>
+	                                 </div>
+	                             </div>
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+        <!-- 查看题目窗口 start -->
+		<div class="md-modal md-effect-15" id="modal-15">
+		    <div class="md-content">
+		        <h3 class="theme-bg2">试题</h3>
+		        <div style="overflow: scroll; scrolling: yes;height:366px">
+		            <ul>
+		            	<template v-for="(data,index) in queList">
+			                <li>
+			                	<template v-if="'F' != TYPE"><strong><b>{{index+1}}.</b></strong><b>{{data.TITLE}}</b></template>
+			                	<template v-if="'F' == TYPE"><span v-html="data.TITLE.split('../../plugins/ueditor').join(serverurl+'plugins/ueditor')"></span></template>
+			                	<template v-if="'A' == TYPE || 'B' == TYPE">(<span class="text-success mb-1 mb-1">正确答案：{{data.ANSWER}}</span>)</template>
+			                	<template v-if="'C' == TYPE">(<span class="text-success mb-1 mb-1">正确答案：{{data.ANSWER == 'true'?'正确':'错误'}}</span>)</template>
+			               		<template v-if="'F' != TYPE && '' != data.FILEPATH && null != data.FILEPATH"><br><img width="300" v-bind:src="data.FILEPATH"></template>
+			                	<template v-if="('A' == TYPE || 'B' == TYPE) && data.FOPTION.length < 53"><br>{{data.FOPTION.split(",fh,").join(" ")}}</template>
+								<template v-if="('A' == TYPE || 'B' == TYPE) && data.FOPTION.length > 52"><br><span v-html="lineFeed(data.FOPTION.split(',fh,'))"></span></template>
+			                	<template v-if="'D' == TYPE || 'E' == TYPE || 'F' == TYPE"><br><span class="text-success mb-1 mb-1">正确答案：{{data.ANSWER}}</span></template>
+			                	<br><span class="text-primary mb-1">[ 答案解析：{{data.REMARKS}} ]</span>
+			                	<div class="text-info mb-1">[ 类型：{{data.DNAME1}}&nbsp;级别：{{data.DNAME2}} ]</div>
+			                	<span class="text-danger mb-1 mb-1">[ 你的答案：{{USERANSWER}} ]</span>
+			                </li>
+		                </template>
+		            </ul>
+		            <button class="btn btn-primary md-close">关闭</button>
+		        </div>
+		    </div>
+		</div>
+		<div class="md-overlay"></div>
+        <!-- 查看题目窗口 end -->
+            
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/modal-window-effects/js/classie.js"></script>
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js --> 
+<script type="text/javascript" src="../../../assets/js-v/exam/smallquestionfo_list.js"></script>
+
+</body>
+</html>

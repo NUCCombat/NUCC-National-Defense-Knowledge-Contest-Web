@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <link rel="stylesheet" type="text/css" href="../../../plugins/barrager/barrager.css">
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    
+    <script type="text/javascript" src="../../../plugins/cyberplayer/cyberplayer.js"></script>
+
+</head>
+
+<body style="background-color: white;">
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+					
+								<div style="width: 100%;margin-top: -5px;">
+							       <div id="playercontainer"></div>
+							       <table>
+										<tr>
+											<td style="vertical-align:top;padding-left:5px;padding-top: 5px;">
+												<button onclick="changeUrl(1)" class="btn btn-dark btn-sm" style="width:88px;height:30px;margin-top:1px;" title="M3U8">
+													<span style="margin-top:-3px;margin-left: -6px;">线路M3U8</span>
+												</button>
+												<button onclick="changeUrl(2)" class="btn btn-dark btn-sm" style="width:86px;height:30px;margin-top:1px;margin-left: -9px;" title="HTTPFLV">
+													<span style="margin-top:-3px;margin-left: -6px;">线路FLV</span>
+												</button>
+												<button onclick="changeUrl(3)" class="btn btn-dark btn-sm" style="width:88px;height:30px;margin-top:1px;margin-left: -9px;" title="RTMP">
+													<span style="margin-top:-3px;margin-left: -6px;">线路RTMP</span>
+												</button>
+											</td>
+											<td>
+                                            	<div class="input-group input-group-sm mb-3">
+                                                    <input type="text" class="form-control" v-model="CONTENT" placeholder="回车也可以发送弹幕" style="width:461px;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-secondary" type="button" v-on:click="run_example">发送</button>
+                                                        <button class="btn btn-light" type="button" v-on:click="clear_barrage">清屏</button>
+                                                    </div>
+                                                </div>
+                                            </td>
+											<td style="padding-left: 19px;">
+                                                <div class="form-group">
+                                                     <div class="switch switch-info d-inline m-r-10">
+                                                         <input type="checkbox" id="switch-i-1" v-model="DMKG">
+                                                         <label for="switch-i-1" class="cr"></label>
+                                                     </div>
+                                                     <label>{{DMKG?'弹幕开':'弹幕关'}}</label>
+                                                 </div>
+                                            </td>
+											
+										</tr>
+									</table>
+						           <!-- [加载状态 ] start -->
+								    <div id="jiazai" style="display:none;margin-top:50px;">
+								    	<div class="d-flex justify-content-center">
+	                                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+								    <!-- [ 加载状态  ] End -->
+								</div>
+	    
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<script src="../../../plugins/barrager/jquery.barrager.js"></script>
+
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/course/livebroadcast_view.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/modal-window-effects/css/md-modal.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <!-- 日期插件(类型2) -->
+    <link rel="stylesheet" href="../../../assets/plugins/bootstrap-datetimepicker/css/bootstrap-datepicker3.css">
+    
+    <!-- select插件 -->
+    <link rel="stylesheet" href="../../../assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/multi-select/css/multi-select.css">
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    <style>
+        .datepicker>.datepicker-days {
+            display: block;
+        }
+        ol.linenums {
+            margin: 0 0 0 -8px;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+							<!-- [ Hover-table ] start -->
+							
+                            <div class="col-xl-12" style="max-width: 966px;">
+                            
+                                 <div class="card">
+                                     <div class="card-header">
+                                         <h5>试卷参数</h5>
+                                     </div>
+                                     <div class="card-block px-0 py-3">
+                                         <div class="table-responsive">
+                                         	<div style="width: 100%;padding-left: 15px;">
+												<div id="showform">
+													 <table style="margin-top: 5px;width: 900px;">
+														<tr>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3">
+							                                    	<div class="input-group-prepend">
+							                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">试卷名称</span></span>
+							                                    	</div>
+							                                   	 	<input type="text" class="form-control" ref="TITLE" id="TITLE" v-model="pd.TITLE" maxlength="30" placeholder="这里输入试卷名称" title="试卷名称" style="width: 649px;">
+							                                 	</div>
+											            	</td>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3">
+							                                    	<div class="input-group-prepend">
+							                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">试卷类型</span></span>
+							                                    	</div>
+								                                   	<select ref="PAPERTYPE" id="PAPERTYPE" v-model="PAPERTYPE"  title="试卷类型" data-placeholder="试卷类型" style="width:85px;padding-left:10px;border: 1px solid #CED4DA;transparent;appearance:none;-moz-appearance:none;-webkit-appearance:none;"></select>
+							                                 	</div>
+											            	</td>
+											         	</tr>
+											         </table>
+											         <table style="margin-top: 0px;width: 910px;">
+														<tr>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;max-width: 222px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">卷面总分</span></span>
+								                                    </div>
+								                                    <input type="number" class="form-control" ref="TOTALSCORE" id="TOTALSCORE" v-model.number="pd.TOTALSCORE" oninput="if(value.length>11 || value.length<1)value=value.slice(0,11)" placeholder="自动计算" title="卷面总分"  style="max-width: 143px;" disabled="disabled">
+								                                </div>
+											            	</td>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;max-width: 222px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">及格分数</span></span>
+								                                    </div>
+								                                    <input type="number" class="form-control" ref="PASSINGSCORE" id="PASSINGSCORE" v-model.number="pd.PASSINGSCORE" oninput="if(value.length>11 || value.length<1)value=value.slice(0,11)" placeholder="输入及格分数" title="及格分数" style="max-width: 143px;">
+								                                </div>
+											            	</td>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;max-width: 235px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">考试时长</span></span>
+								                                    </div>
+								                                    <input type="number" class="form-control" ref="DURATION" id="DURATION" v-model.number="pd.DURATION" oninput="if(value.length>3 || value.length<1)value=value.slice(0,3)" placeholder="输入考试时长" title="考试时长" style="max-width: 146px;">
+								                                    <div style="padding-top: 6px;padding-left: 5px;padding-right: 5px;">分钟 </div>
+								                                </div>
+											            	</td>
+											            	<td>
+											            	<div class="input-group input-group-sm mb-3" style="margin-top: -10px;max-width: 179px;">
+							                                    <div class="input-group-prepend">
+							                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">考评成绩</span></span>
+							                                    </div>
+							                                    <select ref="EVALUATIONRESULTS" id="EVALUATIONRESULTS" v-model="EVALUATIONRESULTS"  title="考评成绩方式" data-placeholder="考评成绩" style="width:100px;padding-left:10px;border: 1px solid #CED4DA;transparent;appearance:none;-moz-appearance:none;-webkit-appearance:none;">
+							                                    	<option value="A">考完直接出</option>
+							                                    	<option value="B">人工阅卷后</option>
+							                                    </select>
+							                                </div>
+											            	</td>
+											         	</tr>
+											        </table>
+													<table style="margin-top: 0px;width: 900px;">
+														<tr>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">重复考试</span></span>
+								                                    </div>
+								                                    <div class="switch switch-alternative d-inline m-r-10" style="padding-left: 15px;padding-bottom: 9px;">
+							                                            <input type="checkbox" id="switch-a-1" v-model="FREPEAT">
+							                                            <label for="switch-a-1" class="cr"></label>
+							                                            	{{FREPEAT?'可以':'仅一次'}}&nbsp;(每人)
+						                                       		</div>
+						                                       		<template v-if="FREPEAT">
+						                                       		<div class="switch switch-alternative d-inline m-r-10" style="padding-left: 15px;padding-bottom: 9px;">
+							                                            <input type="checkbox" id="switch-a-1b" v-model="FTWICE">
+							                                            <label for="switch-a-1b" class="cr"></label>
+							                                            	{{FTWICE?'补考一次':'不限次数'}}&nbsp;
+						                                       		</div>
+						                                       		</template>
+								                                </div>
+											            	</td>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">公布答案</span></span>
+								                                    </div>
+								                                    <div class="switch switch-alternative d-inline m-r-10" style="padding-left: 15px;padding-bottom: 9px;">
+							                                            <input type="checkbox" id="switch-a-2" v-model="PUBLISHANSWER">
+							                                            <label for="switch-a-2" class="cr"></label>
+							                                            	{{PUBLISHANSWER?'公布':'不公布'}}
+						                                       		</div>
+								                                </div>
+											            	</td>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">是否单题</span></span>
+								                                    </div>
+								                                    <div class="switch switch-alternative d-inline m-r-10" style="padding-left: 15px;padding-bottom: 9px;">
+							                                            <input type="checkbox" id="switch-a-2a" v-model="ISALONE">
+							                                            <label for="switch-a-2a" class="cr"></label>
+							                                            	{{ISALONE?'是 (一道道题作答)':'否 (试题全部罗列)'}}
+						                                       		</div>
+								                                </div>
+											            	</td>
+											         	</tr>
+											        </table>
+											        <table style="margin-top: 0px;width: 900px;">
+														<tr>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">题目顺序</span></span>
+								                                    </div>
+								                                    <div class="switch switch-alternative d-inline m-r-10" style="padding-left: 15px;padding-bottom: 9px;">
+							                                            <input type="checkbox" id="switch-a-3" v-model="FHORDER">
+							                                            <label for="switch-a-3" class="cr"></label>
+							                                            	{{FHORDER?'所有人的题目顺序相同':'每个人的题目顺序不同'}}
+						                                       		</div>
+								                                </div>
+											            	</td>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">人脸识别</span></span>
+								                                    </div>
+								                                    <div class="switch switch-alternative d-inline m-r-10" style="padding-left: 15px;padding-bottom: 9px;">
+							                                            <input type="checkbox" id="switch-a-5" v-model="FACE">
+							                                            <label for="switch-a-5" class="cr"></label>
+							                                            	{{FACE?'需要验证':'不验证'}}
+						                                       		</div>
+								                                </div>
+											            	</td>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;height:40px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">截止日期</span></span>
+								                                    </div>
+								                                    <div class="switch switch-alternative d-inline m-r-10" style="padding-left: 2px;">
+							                                           <input type="text" ref="OTIME" id="OTIME" maxlength="32" placeholder="考试截止日期" title="截止日期" style="width: 100%;border:0;padding-left:8px;height:40px;background-color: #F4F7FA;" readonly="readonly">
+						                                       		</div>
+								                                </div>
+											            	</td>
+											         	</tr>
+											        </table>
+													<table style="margin-top: 0px;width: 900px;">
+														<tr>
+											            	<td>
+											            		<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+								                                    <div class="input-group-prepend">
+								                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">考试对象</span></span>
+								                                    </div>
+								                                    <select class="js-example-basic-multiple col-sm-12" multiple="multiple" id="EXAMINEE" style="max-width: 819px;" data-placeholder="（非必录）这里选择考试对象(选填，不选的话默认全部可以参加考试)">
+						                                            <option value=""></option>
+																	<template v-for="data in roleList">
+																		<template v-if="'1' == data.rights">
+																		<option v-bind:value="data.role_ID" selected>{{data.role_NAME}}</option>
+																		</template>
+																		<template v-else>
+																		<option v-bind:value="data.role_ID">{{data.role_NAME}}</option>
+																		</template>
+																	</template>
+						                                        	</select>
+								                                </div>
+											            	</td>
+											         	</tr>
+											         </table>
+													<div class="input-group input-group-sm mb-3" style="margin-top: -9px;max-width: 900px;">
+					                                    <div class="input-group-prepend">
+					                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">试卷说明</span></span>
+					                                    </div>
+					                                    <input type="text" class="form-control" ref="REMARKS" id="REMARKS" v-model="pd.REMARKS" maxlength="30" placeholder="这里输入试卷说明" title="试卷说明" style="max-width: 821px;">
+					                                </div>
+					                                <table style="margin-top: 0px;width: 900px;">
+														<tr>
+											            	<td>
+											            		<div style="width: 100%;padding-bottom: 2px;margin-top: 10px;" class="center">
+																	<a v-show="add || edit" class="btn btn-light btn-sm" v-on:click="save">{{msg == "add"?"下一步":"保存"}}</a>
+																	<a v-show="cha" class="btn btn-light btn-sm" onclick="window.location.href = '../../exam/testpaper/testpaper_list.html';">试卷列表</a>
+																	<button id="viewquetion" data-modal="modal-8" style="margin-left: 10px;display: none;" type="button" class="btn btn-secondary btn-sm md-trigger"></button>
+																</div>
+											            	</td>
+											         	</tr>
+											         </table>
+												</div>
+												<!-- [加载状态 ] start -->
+											    <div id="jiazai" style="display:none;margin-top:50px;">
+											    	<div class="d-flex justify-content-center">
+				                                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+			                                                <span class="sr-only">Loading...</span>
+			                                            </div>
+			                                        </div>
+			                                    </div>
+											    <!-- [ 加载状态  ] End -->
+											</div>
+                                         </div>
+                                     </div>
+                                 </div>
+                            
+							</div>
+							
+							<div class="col-sm-12" style="margin-top: -13px;">
+                                 <div class="card">
+                                     <div class="card-header">
+                                         <h5>试卷题型</h5>
+                                     </div>
+                                     <div class="card-block">
+                                         <template v-if="msg == 'edit'">
+											<div style="margin-top: -29px;width: 100%;">
+												<iframe name="treeFrame" id="treeFrame" frameborder="0" v-bind:src="'../testpapermx/testpapermx_list.html?TESTPAPER_ID='+TESTPAPER_ID" style="margin:0 auto;width:100%;height:466px;"></iframe>
+											</div>
+										</template>
+                                     </div>
+                                 </div>
+                             </div>
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+		<!-- 查看题目窗口 start -->
+		<div class="md-modal md-effect-8" id="modal-8">
+		    <div class="md-content">
+		        <h3 class="theme-bg2">试题预览</h3>
+		        <div style="overflow: scroll; scrolling: yes;height:600px">
+		            <ul>
+		            	<template v-for="(data,index) in queList">
+			                <li>
+			                	<template v-if="'F' != TYPE"><strong><b>{{index+1}}.</b></strong><b>{{data.TITLE}}</b></template>
+			                	<template v-if="'F' == TYPE"><span v-html="data.TITLE.split('../../plugins/ueditor').join(serverurl+'plugins/ueditor')"></span></template>
+			                	<template v-if="'A' == TYPE || 'B' == TYPE">(<span class="text-danger mb-1 mb-1">答案：{{data.ANSWER}}</span>)</template>
+			                	<template v-if="'C' == TYPE">(<span class="text-danger mb-1 mb-1">答案：{{data.ANSWER == 'true'?'正确':'错误'}}</span>)</template>
+			               		<template v-if="'F' != TYPE && '' != data.FILEPATH && null != data.FILEPATH"><br><img width="300" v-bind:src="data.FILEPATH"></template>
+			                	<template v-if="('A' == TYPE || 'B' == TYPE) && data.FOPTION.length < 53"><br>{{data.FOPTION.split(",fh,").join(" ")}}</template>
+								<template v-if="('A' == TYPE || 'B' == TYPE) && data.FOPTION.length > 52"><br><span v-html="lineFeed(data.FOPTION.split(',fh,'))"></span></template>
+			                	<template v-if="'D' == TYPE || 'E' == TYPE || 'F' == TYPE"><br><span class="text-danger mb-1 mb-1">答案：{{data.ANSWER}}</span></template>
+			                	<div class="text-info mb-1">[类型：{{data.DNAME1}}&nbsp;级别：{{data.DNAME2}}]</div>
+			                </li>
+		                </template>
+		            </ul>
+		            <button class="btn btn-primary md-close">关闭</button>
+		        </div>
+		    </div>
+		</div>
+		<div class="md-overlay"></div>
+        <!-- 查看题目窗口 end -->
+            
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/modal-window-effects/js/classie.js"></script>
+<!-- 日期插件(类型2) -->
+<script type="text/javascript" src="../../../assets/plugins/bootstrap-datetimepicker/js/bootstrap-datepicker.js"></script>
+<script>
+$(document).ready(function() {
+    $('#OTIME').datepicker({	//CTIME为日期框input的ID
+        autoclose: true,
+        keyboardNavigation: false,
+        forceParse: false,
+        todayHighlight: true
+    });
+});
+</script>
+<!-- select插件 -->
+<script src="../../../assets/plugins/select2/js/select2.full.min.js"></script>
+<script src="../../../assets/plugins/multi-select/js/jquery.quicksearch.js"></script>
+<script src="../../../assets/plugins/multi-select/js/jquery.multi-select.js"></script>
+<script src="../../../assets/js/pages/form-select-custom.js"></script>
+
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js --> 
+<script type="text/javascript" src="../../../assets/js-v/exam/testpaper_edit.js"></script>
+
+</body>
+</html>

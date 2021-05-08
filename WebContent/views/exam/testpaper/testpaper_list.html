@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/modal-window-effects/css/md-modal.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+
+							    <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card">
+							
+										<!-- 检索  -->
+										<div style="padding-left: 20px;padding-top: 15px;">
+										<table>
+											<tr>
+												<td>
+							                        <div class="input-group input-group-sm mb-3">
+	                                                	<input class="form-control" type="text" v-model="KEYWORDS" placeholder="这里输入关键词" />
+	                                            	</div>
+												</td>
+												<td style="vertical-align:top;padding-left:2px;">
+						                        	<select style="height: 30px;width:100px;padding-left:6px;border: 1px solid #CED4DA;transparent;appearance:none;-moz-appearance:none;-webkit-appearance:none;" id="PAPERTYPE" v-model="PAPERTYPE" data-placeholder="试卷类型"></select>
+												</td>
+												<td style="vertical-align:top;padding-left:5px;">
+													<a class="btn btn-light btn-sm" v-on:click="getList" style="width: 23px;height:30px;margin-top:1px;" title="检索"><i style="margin-top:-3px;margin-left: -6px;"  class="feather icon-search"></i></a>
+												</td>
+												<td v-show="loading">
+												<!-- [加载状态 ] start -->
+										    	<div class="d-flex justify-content-center" style="margin-top:-10px;">
+		                                            <div class="spinner-grow spinner-grow-sm" role="status">
+		                                                <span class="sr-only">Loading...</span>
+		                                            </div>
+		                                        </div>
+										    	<!-- [ 加载状态  ] End -->
+												</td>
+											</tr>
+										</table>
+										</div>
+										<!-- 检索  -->
+										<div class="card-block table-border-style" style="margin-top: -15px">
+                                			<div class="table-responsive">
+                                    			<table class="table table-hover">	
+													<thead>
+														<tr>
+															<th style="width:50px;">NO</th>
+															<th>试卷名称</th>
+															<th>试卷类型</th>
+															<th>卷面总分</th>
+															<th>及格分数</th>
+															<th>考试时长</th>
+															<th>
+																{{STATE == 'edit'? '编辑时间':''}}
+																{{STATE == 'release'? '发布时间':''}}
+																{{STATE == 'end'? '结束时间':''}}
+															</th>
+															<th>截止日期</th>
+															<th>考评成绩</th>
+															<th>重复考试</th>
+															<th>公布答案</th>
+															<th>题序</th>
+															<th>人脸识别</th>
+															<th>单题</th>
+															<th>试卷状态</th>
+															<th>操作</th>
+														</tr>
+													</thead>
+													<tbody>
+													<!-- 开始循环 -->	
+														<template v-for="(data,index) in varList">
+															<tr>
+																<td>{{page.showCount*(page.currentPage-1)+index+1}}</td>
+																<td>{{(data.TITLE).substring(0,10)}}...</td>
+																<td>{{data.DNAME2}}</td>
+																<td>{{data.TOTALSCORE}} 分</td>
+																<td>{{data.PASSINGSCORE}} 分</td>
+																<td>{{data.DURATION}} (分钟)</td>
+																<td>{{data.ETIME}}</td>
+																<td>{{data.OTIME}}</td>
+																<td>
+																	<template v-if="data.EVALUATIONRESULTS == 'A'">
+																		<span class="badge badge-warning">考完直接出</span>
+																	</template>
+																	<template v-else>
+																		<span class="badge badge-info">人工阅卷后</span>
+																	</template>
+																</td>
+																<td>
+																	<template v-if="data.FREPEAT == 'true'">
+																		<span class="badge badge-success">
+																		{{data.FTWICE == 'true'?'可补考一次':'不限次数'}}
+																		</span>
+																	</template>
+																	<template v-else>
+																		<span class="badge badge-danger">仅一次</span>
+																	</template>
+																</td>
+																<td>
+																	<template v-if="data.PUBLISHANSWER == 'true'">
+																		<span class="badge badge-success">公布</span>
+																	</template>
+																	<template v-else>
+																		<span class="badge badge-danger">不公布</span>
+																	</template>
+																</td>
+																<td>
+																	<template v-if="data.FHORDER == 'true'">
+																		<span class="badge badge-success">一样</span>
+																	</template>
+																	<template v-else>
+																		<span class="badge badge-danger">随机</span>
+																	</template>
+																</td>
+																<td>
+																	<template v-if="data.FACE == 'true'">
+																		<span class="badge badge-success">需要验证</span>
+																	</template>
+																	<template v-else>
+																		<span class="badge badge-danger">不验证</span>
+																	</template>
+																</td>
+																<td>
+																	<template v-if="data.ISALONE == 'true'">
+																		<span class="badge badge-success">是</span>
+																	</template>
+																	<template v-else>
+																		<span class="badge badge-danger">否</span>
+																	</template>
+																</td>
+																<td>
+																	<template v-if="data.STATE == 'edit'">
+																		<span class="badge badge-primary">正在编辑</span>
+																	</template>
+																	<template v-else-if="data.STATE == 'release'">
+																		<template v-if="NTIME > data.FOTIME">
+																			<span class="badge badge-danger">试卷过期</span>
+																		</template>
+																		<template v-if="NTIME <= data.FOTIME">
+																			<span class="badge badge-primary">正在考试</span>
+																			<div class="spinner-grow spinner-grow-sm" style="padding-top:-2px;" role="status"><span class="sr-only">..</span></div>
+																		</template>
+																	</template>
+																	<template v-else>
+																		<span class="badge badge-secondary">历史试卷</span>
+																	</template>
+																</td>
+																<td>
+																	<a v-show="data.EXAMINEE != '' && null != data.EXAMINEE " title="考试对象" v-on:click="viewDx(data.TESTPAPER_ID)" style="height:23px;" class="btn btn-light btn-sm"><div style="margin-top:-5px;margin-left: -5px;"><i class="feather icon-search"></i>对象</div></a>
+																	<a title="预览试卷" v-on:click="view(data.TESTPAPER_ID)" style="height:23px;" class="btn btn-light btn-sm"><div style="margin-top:-5px;margin-left: -5px;"><i class="feather icon-search"></i>预览</div></a>
+																	<a v-show="alist && (data.STATE == 'release' || data.STATE == 'end')" title="成绩" v-on:click="achievement(data.TESTPAPER_ID)" style="height:23px;" class="btn btn-light btn-sm"><div style="margin-top:-5px;margin-left: -5px;"><i class="feather icon-user"></i>成绩</div></a>
+																	<a v-show="data.STATE == 'edit'" title="发放试卷" v-on:click="grant(data.TESTPAPER_ID)" style="height:23px;" class="btn btn-light btn-sm"><div style="margin-top:-5px;margin-left: -5px;"><i class="feather icon-printer"></i>发放</div></a>
+																	<a v-show="data.STATE == 'release'" title="结束考试" v-on:click="goEnd(data.TESTPAPER_ID)" style="height:23px;" class="btn btn-light btn-sm"><div style="margin-top:-5px;margin-left: -5px;"><i class="feather icon-pause"></i>结束</div></a>
+																	<a v-show="data.STATE == 'end'" title="复制试卷" v-on:click="goCopy(data.TESTPAPER_ID)" style="height:23px;" class="btn btn-light btn-sm"><div style="margin-top:-5px;margin-left: -5px;"><i class="feather icon-share-2"></i>复制</div></a>
+																	<a v-show="edit && data.STATE == 'edit'" title="修改" v-on:click="goEdit(data.TESTPAPER_ID)" style="cursor:pointer;"><i class="feather icon-edit-2"></i></a>
+								                 					<a v-show="del && data.STATE != 'release'"  title="删除" v-on:click="goDel(data.TESTPAPER_ID,data.STATE)" style="cursor:pointer;"><i class="feather icon-x"></i></a>
+																</td>
+															</tr>
+														</template>
+														<tr v-show="varList.length==0">
+															<td colspan="10">没有相关数据</td>
+														</tr>
+													</tbody>
+												</table>
+												<table style="width:100%;margin-top:15px;">
+													<tr>
+														<td style="vertical-align:top;"></td>
+														<td style="vertical-align:top;"><div style="float: right;padding-top: 0px;margin-top: 0px;" v-html="page.pageStr"></div></td>
+													</tr>
+												</table>
+											</div>
+                                		</div>
+			
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        <button id="viewquetion" data-modal="modal-15" style="margin-left: 10px;display: none;" type="button" class="btn btn-secondary btn-sm md-trigger"></button>
+        <!-- 查看考试对象窗口 start -->
+		<div class="md-modal md-effect-15" id="modal-15" style="width: 300px;">
+		    <div class="md-content">
+		        <h3 class="theme-bg2">考试对象</h3>
+		        <div>
+		            <ul>
+                    	<template v-for="(data,index) in roleList">
+			               <template v-if="'1' == data.rights"><li><b>{{data.role_NAME}}</b></li></template>
+		                </template>
+               		</ul>
+		        </div>
+		    </div>
+		</div>
+		<div class="md-overlay"></div>
+        <!-- 查看考试对象窗口 end -->
+            
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/modal-window-effects/js/classie.js"></script>
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js --> 
+<script type="text/javascript" src="../../../assets/js-v/exam/testpaper_list.js"></script>
+
+</body>
+</html>

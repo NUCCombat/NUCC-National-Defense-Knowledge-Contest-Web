@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/modal-window-effects/css/md-modal.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <script src="../../../plugins/echarts/echarts.min.js"></script>
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app" v-bind:style="{fontSize: fontSize + 'px' }">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+							    <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card" >
+										<div class="card-block table-border-style" style="margin-top: -30px">
+                                			<div class="table-responsive">
+                                				<img v-bind:src="'../../../assets/images/jige'+PASSONOT+'.png'" style="z-index: 1;position:absolute;float: right;margin-top: 3px;" />
+                                				<!-- [加载状态 ] start -->
+											    <div v-show="loading">
+										    		<div class="d-flex justify-content-center">
+				                                      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+				                                          <span class="sr-only">Loading...</span>
+				                                      </div>
+				                                	</div>
+				                                </div>
+				                                <br>
+											    <!-- [ 加载状态  ] End -->
+                                    			<div style="width: 100%;text-align: center;"><h4>{{pd.TITLE}}</h4></div><div style="float: right;margin-right: 88px;"><div style="z-index: 1;position:absolute;font-size: 26px;margin-top: -20px;color: red"><b>{{SCORE}}</b>&nbsp;分</div></div>
+                                    			<div style="width: 100%;text-align: center;"><p class="text-muted mb-0">{{pd.REMARKS}}&nbsp;&nbsp;(&nbsp;满分{{pd.TOTALSCORE}}分，考试时间{{pd.DURATION}}分钟&nbsp;)</p></div>
+                                    			<div style="width: 100%;text-align: center;margin-top: 5px;"><p class="text-muted mb-0">
+                                    			页面字号：&nbsp;[&nbsp;
+											     <a v-on:click="fontSize -=5" style="cursor:pointer;">小</a>&nbsp;
+											     <a v-on:click="fontSize=14" style="cursor:pointer;">中</a>&nbsp;
+											     <a v-on:click="fontSize +=5" style="cursor:pointer;">大</a>
+											    &nbsp;]</p>
+											    </div>
+                                    			<br>
+                                    			<ul style="margin-left: -30px;">
+									            	<template v-for="(data,index) in varList">
+										                <li>
+										                	<h6 style="margin-top: 10px;"><b>{{data.TITLE}}</b>&nbsp;<font color="#808080">({{data.REMARKS}}&nbsp;每题{{data.FRACTION}}分，{{data.TOTALSCORE}})</font></h6>
+										                	<ul style="margin-left: -20px;">
+											                	<template v-for="(fdata,findex) in data.tqList">
+													                <li style="list-style-type:none;margin-top: 5px;">
+													                	{{findex+1}} . <span v-html="fdata.TITLE.split('../../plugins/ueditor').join(serverurl+'plugins/ueditor')"></span>
+													                	<template v-if="'' != fdata.FILEPATH && null != fdata.FILEPATH"><br>&nbsp;&nbsp;&nbsp;<img width="300" v-bind:src="fdata.FILEPATH"></template>
+													                	<template v-if="data.TYPE == 'A'">
+													                		<template v-if="undefined != fdata.FOPTION"><i v-on:click="statistics(fdata.SINGLEELECTION_ID,fdata.FOPTION.split(',fh,').length,data.TYPE,0);" class="feather icon-bar-chart-2" style="cursor:pointer;" title="统计"></i></template>
+																			<i v-on:click="collection(fdata.TITLE,fdata.SINGLEELECTION_ID,data.TYPE,'c'+index+''+findex);" v-bind:id="'c'+index+''+findex" class="feather icon-save" style="cursor:pointer;" title="收藏"></i>
+																		</template>
+																		<template v-if="data.TYPE == 'B'">
+																			<template v-if="undefined != fdata.FOPTION"><i v-on:click="statistics(fdata.MULTIPLESELECTION_ID,fdata.FOPTION.split(',fh,').length,data.TYPE,0);" class="feather icon-bar-chart-2" style="cursor:pointer;" title="统计"></i></template>
+																			<i v-on:click="collection(fdata.TITLE,fdata.MULTIPLESELECTION_ID,data.TYPE,'c'+index+''+findex);" v-bind:id="'c'+index+''+findex" class="feather icon-save" style="cursor:pointer;" title="收藏"></i>
+																		</template>
+																		<template v-if="data.TYPE == 'C'">
+																			<i v-on:click="statistics(fdata.JUDGEMENTQUESTION_ID,0,data.TYPE,0);" class="feather icon-bar-chart-2" style="cursor:pointer;" title="统计"></i>
+																			<i v-on:click="collection(fdata.TITLE,fdata.JUDGEMENTQUESTION_ID,data.TYPE,'c'+index+''+findex);" v-bind:id="'c'+index+''+findex" class="feather icon-save" style="cursor:pointer;" title="收藏"></i>
+																		</template>
+																		<template v-if="data.TYPE == 'D'">
+																			<i v-on:click="statistics(fdata.COMPLETION_ID,0,data.TYPE,data.FRACTION);" class="feather icon-bar-chart-2" style="cursor:pointer;" title="统计"></i>
+																			<i v-on:click="collection(fdata.TITLE,fdata.COMPLETION_ID,data.TYPE,'c'+index+''+findex);" v-bind:id="'c'+index+''+findex" class="feather icon-save" style="cursor:pointer;" title="收藏"></i>
+																		</template>
+																		<template v-if="data.TYPE == 'E'">
+																			<i v-on:click="statistics(fdata.LARGEQUESTION_ID,0,data.TYPE,data.FRACTION);" class="feather icon-bar-chart-2" style="cursor:pointer;" title="统计"></i>
+																			<i v-on:click="collection(fdata.TITLE,fdata.LARGEQUESTION_ID,data.TYPE,'c'+index+''+findex);" v-bind:id="'c'+index+''+findex" class="feather icon-save" style="cursor:pointer;" title="收藏"></i>
+																		</template>
+																		<template v-if="data.TYPE == 'F'">
+																			<i v-on:click="statistics(fdata.COMPOUNDQUESTION_ID,0,data.TYPE,data.FRACTION);" class="feather icon-bar-chart-2" style="cursor:pointer;" title="统计"></i>
+																			<i v-on:click="collection(fdata.TITLE,fdata.COMPOUNDQUESTION_ID,data.TYPE,'c'+index+''+findex);" v-bind:id="'c'+index+''+findex" class="feather icon-save" style="cursor:pointer;" title="收藏"></i>
+																		</template>
+													                	<template v-if="undefined != fdata.FOPTION && fdata.FOPTION.length < 77"><br><div style="margin-top: 5px;margin-left: 20px;">{{fdata.FOPTION.split(",fh,").join("&nbsp;&nbsp;&nbsp;")}}</div></template>
+													                	<template v-if="undefined != fdata.FOPTION && fdata.FOPTION.length > 76"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="lineFeed(fdata.FOPTION.split(',fh,'))"></div></template>
+													                	<template v-if="data.TYPE == 'A' || data.TYPE == 'B'">
+													                		<template v-if="'true' == pd.PUBLISHANSWER">
+													                		<span class="text-success mb-1" style="padding-left: 20px;">[ 正确答案：{{fdata.ANSWER}} ]</span>
+													                		</template>
+													                		<span class="text-danger mb-1 mb-1" style="padding-left: 20px;">[ 考生选择：{{fdata.UA}} ]</span>
+													                		<img v-bind:src="'../../../assets/images/'+fdata.UR+'.png'" width="30px;" />
+													                		<template v-if="'true' == fdata.UR"><b>+&nbsp;{{fdata.UF}}</b>&nbsp;分</template>
+													                		<template v-if="'true' == pd.PUBLISHANSWER"><br><span class="text-primary mb-1" style="padding-left: 20px;">[ 答案解析：{{fdata.REMARKS}} ]</span></template>
+													                	</template>
+													                	<template v-if="data.TYPE == 'C'">
+													                		<br>
+													                		<template v-if="'true' == pd.PUBLISHANSWER">
+													                		<span class="text-success mb-1" style="padding-left: 20px;">[ 正确答案：{{fdata.ANSWER=='true'?'对':'错'}} ]</span>
+													                		</template>
+													                		<span class="text-danger mb-1 mb-1" style="padding-left: 20px;">[ 考生填写的答案：{{fdata.UA=='true'?'对':'错'}} ]</span>
+													                		<img v-bind:src="'../../../assets/images/'+fdata.UR+'.png'" width="30px;" />
+													                		<template v-if="'true' == fdata.UR"><b>+&nbsp;{{fdata.UF}}</b>&nbsp;分</template>
+													                		<template v-if="'true' == pd.PUBLISHANSWER"><br><span class="text-primary mb-1" style="padding-left: 20px;">[ 答案解析：{{fdata.REMARKS}} ]</span></template>
+													                	</template>
+													                	<template v-if="data.TYPE == 'D' || data.TYPE == 'E' || data.TYPE == 'F'">
+													                		<span class="text-danger mb-1 mb-1" style="padding-left: 20px;"><br>[ 考生填写的答案：{{fdata.UA}} ]</span>
+													                		<template v-if="'null' != fdata.UR">
+													                		<img v-bind:src="'../../../assets/images/'+fdata.UR+'.png'" width="30px;" />
+													                		<template v-if="'false' != fdata.UR"><b>+&nbsp;{{fdata.UF}}</b>&nbsp;分</template>
+													                		</template>
+													                		<template v-if="'null' == fdata.UR">
+													                			<b>【未评审】</b>
+													                		</template>
+													                		<template v-if="'true' == pd.PUBLISHANSWER">
+													                		<span class="text-success mb-1" style="padding-left: 20px;"><br>[ 正确答案：{{fdata.ANSWER}} ]</span>
+													                		</template>
+													                		<template v-if="'true' == pd.PUBLISHANSWER"><br><span class="text-primary mb-1">[ 答案解析：{{fdata.REMARKS}} ]</span></template>
+													                	</template>
+													                	
+													                </li>
+												                </template>
+										                	</ul>
+										                </li>
+									                </template>
+									            </ul>
+											</div>
+                                		</div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="viewStatistics" data-modal="modal-16" style="margin-left: 10px;display: none;" type="button" class="btn btn-secondary btn-sm md-trigger"></button>
+            <!-- 查看统计窗口 start -->
+			<div class="md-modal md-effect-16" id="modal-16" style="width: 432px;">
+			    <div class="md-content">
+			        <h3 class="theme-bg2">统计</h3>
+			        <div style="overflow: scroll; scrolling: yes;height:279px;" id="tjid">
+			            <ul style="list-style-type:none;">
+			            	<li>
+			            		<div id="main" style="width: 300px;height:169px;"></div>
+			            	</li>
+			            	<li v-show="fbar" style="padding-top: 20px;">
+			            		<div id="main2" style="width: 300px;height:189px;"></div>
+			            	</li>
+			            </ul>
+			        </div>
+			    </div>
+			</div>
+			<div class="md-overlay"></div>
+	        <!-- 查看统计窗口 end -->
+            
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<script type="text/javascript" src="../../../assets/plugins/modal-window-effects/js/classie.js"></script>
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js --> 
+<script type="text/javascript" src="../../../assets/js-v/exam/achievement_view.js"></script>
+
+</body>
+</html>

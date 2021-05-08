@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>正在考试</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    
+    <!-- 屏蔽鼠标右键功能 -->
+    <script type="text/javascript">
+		document.oncontextmenu=new Function("event.returnValue=false;");
+		document.onselectstart=new Function("event.returnValue=false;");
+	</script>
+    
+</head>
+
+<body>
+    
+   	<div id="rlsb" style="background-color: #E7F4FE;z-index: 9999; position: fixed ! important;width: 100%;height: 500px;top:150px;">
+		<div style="width:100%;text-align: center;margin-top: 79px;">
+			<img id="fimg" src="../../../plugins/photo/images/logo_n.png">
+			<p>需要用手机扫码进行人脸识别</p>
+		</div>
+	</div>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+    
+    <div id="dg" style="z-index: 9999; position: fixed ! important; right: 0px; top: 0px;">
+		<div width="100%" style="position: absolute; width:220px; right: 0px; top: 0px;">
+	  		<div class="alert alert-secondary" role="alert">
+                	考试剩余时间：<sapn id="timer"></sapn>
+            </div>
+            <div class="alert alert-primary" role="alert" id="fix" style="margin-top: -10px;margin-bottom: -5px;">
+            </div>
+            <div class="alert alert-secondary" role="alert" style="margin-top: 10px;">
+            		页面字号：&nbsp;[&nbsp;
+						     <a onclick="doZoom(15);" style="cursor:pointer;">小</a>&nbsp;
+						     <a onclick="doZoom(23);" style="cursor:pointer;">中</a>&nbsp;
+						     <a onclick="doZoom(30);" style="cursor:pointer;">大</a>
+						    &nbsp;]
+            </div>
+		</div>
+	</div> 
+
+    <!-- [ 主内容区 ] start -->
+    <div id="app">
+    
+        <div v-show="fend" style="z-index: 1; position: absolute;top:50%;left:50%;margin-left:-250px; margin-top:-150px;width: 500px;height: 300px;">
+	    	<table style="background-color: #92D050;width: 100%;height: 300px;border:1px solid #ff0000;border-collapse:collapse;">
+	    		<tr>
+	    			<td align="center" colspan="2" ><h3><b>{{PASSONOT == 'yes'?'成绩合格':'成绩不合格'}}</b></h3></td>
+	    		</tr>
+	    		<tr>
+	    			<td align="center" colspan="2"><h3><b><font color="red">{{SCORE}}分</font></b></h3></td>
+	    		</tr>
+	    		<tr>
+	    			<td align="center" colspan="2">
+	    				<h5>
+	    					{{PASSONOT == 'yes'?'通过此次考试!':'未通过此次考试!'}}
+	    				</h5>
+	    			</td>
+	    		</tr>
+	    		<tr>
+	    			<td align="center"><button v-on:click="lookingBack" type="button" class="btn btn-square btn-light">试卷回看</button></td>
+	    			<td align="center">
+	    				<template v-if="ZS != 1 || PASSONOT == 'yes'">
+	    				<button v-on:click="closeWindow" type="button" class="btn btn-square btn-light">结束考试</button>
+	    				</template>
+	    				<template v-if="ZS == 1 && PASSONOT == 'no' && FREPEAT && FTWICE">
+	    				<button v-on:click="onceAgain" type="button" class="btn btn-square btn-light">补考一次</button>
+	    				</template>
+	    			</td>
+	    		</tr>
+	        </table>   	
+		</div> 
+    
+        <div class="pcoded-wrapper">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+							    <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card" >
+										<div class="card-block table-border-style" style="margin-top: -30px">
+                                			<div class="table-responsive">
+                                				<!-- [加载状态 ] start -->
+											    <div v-show="loading">
+										    		<div class="d-flex justify-content-center">
+				                                      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+				                                          <span class="sr-only">Loading...</span>
+				                                      </div>
+				                                	</div>
+				                                </div>
+				                                <br>
+											    <!-- [ 加载状态  ] End -->
+                                    			<div style="width: 100%;text-align: center;"><h4>{{pd.TITLE}}</h4></div>
+                                    			<div style="width: 100%;text-align: center;"><p class="text-muted mb-0">{{pd.REMARKS}}&nbsp;&nbsp;(&nbsp;满分{{pd.TOTALSCORE}}分，考试时间{{pd.DURATION}}分钟&nbsp;)</p></div>
+                                    			<br>
+                                    			<ul style="margin-left: -30px;">
+									            	<template v-for="(data,index) in varList">
+										                <li>
+										                	<ul style="margin-left: -20px;">
+											                	<template v-for="(fdata,findex) in data.tqList">
+													                <li style="list-style-type:none;margin-top: 5px;display: none;" v-bind:id="'falt'+index+''+findex">
+													                	<template v-if="data.TYPE == 'A'">
+																			<span style="display: none;">{{QID = fdata.SINGLEELECTION_ID}}</span>
+																		</template>
+																		<template v-if="data.TYPE == 'B'">
+																			<span style="display: none;">{{QID = fdata.MULTIPLESELECTION_ID}}</span>
+																		</template>
+																		<template v-if="data.TYPE == 'C'">
+																			<span style="display: none;">{{QID = fdata.JUDGEMENTQUESTION_ID}}</span>
+																		</template>
+																		<template v-if="data.TYPE == 'D'">
+																			<span style="display: none;">{{QID = fdata.COMPLETION_ID}}</span>
+																		</template>
+																		<template v-if="data.TYPE == 'E'">
+																			<span style="display: none;">{{QID = fdata.LARGEQUESTION_ID}}</span>
+																		</template>
+																		<template v-if="data.TYPE == 'F'">
+																			<span style="display: none;">{{QID = fdata.COMPOUNDQUESTION_ID}}</span>
+																		</template>
+																		<h6 style="margin-top: 10px;"><b>{{data.TITLE}}</b>&nbsp;<font color="#808080">({{data.REMARKS}}&nbsp;每题{{data.FRACTION}}分，{{data.TOTALSCORE}})</font></h6>
+													                	{{findex+1}} . <span v-html="fdata.TITLE.split('../../plugins/ueditor').join(serverurl+'plugins/ueditor')" v-bind:id="'t'+index+''+findex"></span>
+													                	<template v-if="'' != fdata.FILEPATH && null != fdata.FILEPATH"><br>&nbsp;&nbsp;&nbsp;<img width="300" v-bind:src="fdata.FILEPATH"></template>
+													                	<template v-if="undefined != fdata.FOPTION"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="formatOption(fdata.FOPTION.split(',fh,'),'<br>',index,findex,data.TYPE,compileStr(';B;'+fdata.ANSWER),QID)"></div></template>
+													                	<template v-if="data.TYPE == 'B'"><input type="hidden" v-bind:id="'FIf'+index+findex" value="" /></template>
+													                	<template v-if="data.TYPE == 'C'"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="formatOption('','',index,findex,data.TYPE,compileStr(';B;'+fdata.ANSWER),QID)"></template>
+													                	<template v-if="data.TYPE == 'D'">
+													                		<br>答：<input @blur="subBig($event,index,findex)" v-bind:name="QID" type="text" maxlength="100" title="多处空格的答案用中文输入法下逗号，隔开" style="width:399px;padding-top:5px;border-left-width:0px;border-top-width:0px;border-right-width:0px;border-bottom: 1px solid #dbdbdb" />
+													                	</template>
+													                	<template v-if="data.TYPE == 'E' || data.TYPE == 'F'">
+													                		<br><div style="float:left;">答：</div><textarea @blur="subBig($event,index,findex)" v-bind:name="QID" maxlength="2000" style="width:399px;height:88px;padding-top:5px;border-left-width:0px;border-top-width:0px;border-right-width:0px;border-bottom: 1px solid #dbdbdb"></textarea>
+													                	</template>
+													                </li>
+												                </template>
+										                	</ul>
+										                </li>
+									                </template>
+									            </ul>
+									            <div style="width: 100%;text-align: center;"><button v-show="fnext && gnext" v-on:click="nextQuestions" type="button" class="btn btn-primary" title="" data-toggle="tooltip" data-original-title="btn btn-primary">下一题</button></div>
+									            <div style="width: 100%;text-align: center;"><button v-show="bsub && fend == false && fnext == false" v-on:click="subTextPage" type="button" class="btn btn-secondary" title="" data-toggle="tooltip" data-original-title="btn btn-secondary">提交试卷</button></div>
+											</div>
+                                		</div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+<!-- 生成二维码插件 -->
+<script src="../../../assets/js/jr-qrcode.js"></script>
+
+<!-- 本页面js --> 
+<script type="text/javascript" src="../../../assets/js-v/exam/testpaper_exa_alone.js"></script>
+
+</body>
+</html>

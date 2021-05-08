@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/material/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    
+</head>
+
+<body>
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app" v-bind:style="{fontSize: fontSize + 'px' }">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+							    <!-- [ Hover-table ] start -->
+                                <div class="col-xl-12">
+                                    <div class="card" >
+										<div class="card-block table-border-style" style="margin-top: -30px">
+                                			<div class="table-responsive">
+                                				<!-- [加载状态 ] start -->
+											    <div v-show="loading">
+										    		<div class="d-flex justify-content-center">
+				                                      <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+				                                          <span class="sr-only">Loading...</span>
+				                                      </div>
+				                                	</div>
+				                                </div>
+				                                <br>
+											    <!-- [ 加载状态  ] End -->
+                                    			<div style="width: 100%;text-align: center;"><h4>{{pd.TITLE}}</h4></div>
+                                    			<div style="width: 100%;text-align: center;"><p class="text-muted mb-0">{{pd.REMARKS}}&nbsp;&nbsp;(&nbsp;满分{{pd.TOTALSCORE}}分，考试时间{{pd.DURATION}}分钟&nbsp;)</p></div>
+                                    			<div style="width: 100%;text-align: center;margin-top: 5px;"><p class="text-muted mb-0">
+                                    			页面字号：&nbsp;[&nbsp;
+											     <a v-on:click="fontSize -=5" style="cursor:pointer;">小</a>&nbsp;
+											     <a v-on:click="fontSize =14" style="cursor:pointer;">中</a>&nbsp;
+											     <a v-on:click="fontSize +=5" style="cursor:pointer;">大</a>
+											    &nbsp;]</p>
+											    </div>
+                                    			<br>
+                                    			<ul style="margin-left: -30px;">
+									            	<template v-for="(data,index) in varList">
+										                <li>
+										                	<h6 style="margin-top: 10px;"><b>{{data.TITLE}}</b>&nbsp;<font color="#808080">({{data.REMARKS}}&nbsp;每题{{data.FRACTION}}分，{{data.TOTALSCORE}})</font></h6>
+										                	<ul style="margin-left: -20px;">
+											                	<template v-for="(fdata,findex) in data.tqList">
+													                <li style="list-style-type:none;margin-top: 5px;">
+													                	{{findex+1}} . <span v-html="fdata.TITLE.split('../../plugins/ueditor').join(serverurl+'plugins/ueditor')"></span>
+													                	<template v-if="'' != fdata.FILEPATH && null != fdata.FILEPATH"><br>&nbsp;&nbsp;&nbsp;<img width="300" v-bind:src="fdata.FILEPATH"></template>
+													                	<template v-if="undefined != fdata.FOPTION && fdata.FOPTION.length < 77"><br><div style="margin-top: 5px;margin-left: 20px;">{{fdata.FOPTION.split(",fh,").join("&nbsp;&nbsp;&nbsp;")}}</div></template>
+													                	<template v-if="undefined != fdata.FOPTION && fdata.FOPTION.length > 76"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="lineFeed(fdata.FOPTION.split(',fh,'))"></div></template>
+													                	<template v-if="data.TYPE == 'A' || data.TYPE == 'B'">
+													                		<span class="text-success mb-1" style="padding-left: 20px;">[ 正确答案：{{fdata.ANSWER}} ]</span>
+													                		<span class="text-danger mb-1 mb-1" style="padding-left: 20px;">[ 考生选择：{{fdata.UA}} ]</span>
+													                		<img v-bind:src="'../../../assets/images/'+fdata.UR+'.png'" width="30px;" />
+													                		<template v-if="'true' == fdata.UR"><b>+&nbsp;{{fdata.UF}}</b>&nbsp;分</template>
+													                		<br><span class="text-primary mb-1" style="padding-left: 20px;">[ 答案解析：{{fdata.REMARKS}} ]</span>
+													                	</template>
+													                	<template v-if="data.TYPE == 'C'">
+													                		<br>
+													                		<span class="text-success mb-1" style="padding-left: 20px;">[ 正确答案：{{fdata.ANSWER=='true'?'对':'错'}} ]</span>
+													                		<span class="text-danger mb-1 mb-1" style="padding-left: 20px;">[ 考生填写的答案：{{fdata.UA=='true'?'对':'错'}} ]</span>
+													                		<img v-bind:src="'../../../assets/images/'+fdata.UR+'.png'" width="30px;" />
+													                		<template v-if="'true' == fdata.UR"><b>+&nbsp;{{fdata.UF}}</b>&nbsp;分</template>
+													                		<br><span class="text-primary mb-1" style="padding-left: 20px;">[ 答案解析：{{fdata.REMARKS}} ]</span>
+													                	</template>
+													                	<template v-if="data.TYPE == 'D' || data.TYPE == 'E' || data.TYPE == 'F'">
+													                		<span class="text-danger mb-1 mb-1" style="padding-left: 20px;"><br>[ 考生填写的答案：{{fdata.UA}} ]</span>
+													                		<b style="margin-left: 10px;padding-top: -20px;">评：</b><input @blur="subBig($event,data.FRACTION,fdata.BIGID)" v-bind:id="'pf'+index+'-'+findex" name="NSCORE" type="number" maxlength="100" title="答案错误的话，请输入0" style="width:39px;height:21px;padding-top:5px;border-left-width:1px;border-top-width:1px;border-right-width:1px;border-bottom: 1px solid #dbdbdb;" />&nbsp;<b>分</b>
+													                		<span class="text-success mb-1" style="padding-left: 20px;"><br>[ 正确答案：{{fdata.ANSWER}} ]</span>
+													                		<br><span class="text-primary mb-1">[ 答案解析：{{fdata.REMARKS}} ]</span>
+													                	</template>
+													                	
+													                </li>
+												                </template>
+										                	</ul>
+										                </li>
+									                </template>
+									            </ul>
+									            <div style="width: 100%;text-align: center;"><button v-on:click="subAch" type="button" class="btn btn-secondary" title="" data-toggle="tooltip" data-original-title="btn btn-secondary">提交成绩</button></div>
+											</div>
+                                		</div>
+                                    </div>
+                                </div>
+                                <!-- [ Hover-table ] end -->
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js --> 
+<script type="text/javascript" src="../../../assets/js-v/exam/achievement_correct.js"></script>
+
+</body>
+</html>

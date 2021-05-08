@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>FH Admin</title>
+    <!-- HTML5 Shim and Respond.js IE10 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 10]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="FH Admin QQ313596790" />
+
+    <link rel="icon" href="../../../assets/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="../../../assets/fonts/fontawesome/css/fontawesome-all.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/animation/css/animate.min.css">
+    <link rel="stylesheet" href="../../../assets/css/style.css">
+    
+    <!-- select插件 -->
+    <link rel="stylesheet" href="../../../assets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="../../../assets/plugins/multi-select/css/multi-select.css">
+    
+    <!-- vue -->
+	<script src="../../../assets/js-vue/vue.js"></script>
+    <!--全局配置-->
+    <script src="../../../assets/js-v/config.js"></script>
+    
+    <style type="text/css">
+	.yulantu{
+		z-index: 9999999999999999;
+		position:absolute;
+		border:3px solid #438EB9;
+		display: none;
+	}
+	</style>
+
+</head>
+
+<body style="background-color: white">
+    
+    <!-- [加载状态 ] start -->
+    <div class="loader-bg">
+        <div class="loader-track">
+            <div class="loader-fill"></div>
+        </div>
+    </div>
+    <!-- [ 加载状态  ] End -->
+
+    <!-- [ 主内容区 ] start -->
+        <div class="pcoded-wrapper" id="app">
+            <div class="pcoded-content">
+                <div class="pcoded-inner-content">
+                    <div class="main-body">
+                        <div class="page-wrapper">
+                            <!-- [ Main Content ] start -->
+                            <div class="row">
+					
+								<div style="width: 100%;">
+									<div id="showform">
+										<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">授权对象</span></span>
+		                                    </div>
+		                                    <select class="js-example-basic-multiple col-sm-12" multiple="multiple" id="AUTHORIZED" style="max-width: 819px;" data-placeholder="（非必录）这里选择授权对象(选填，不选的话默认全部可以观看直播)">
+                                            <option value=""></option>
+											<template v-for="data in roleList">
+												<template v-if="'1' == data.rights">
+												<option v-bind:value="data.role_ID" selected>{{data.role_NAME}}</option>
+												</template>
+												<template v-else>
+												<option v-bind:value="data.role_ID">{{data.role_NAME}}</option>
+												</template>
+											</template>
+                                        	</select>
+		                                </div>
+										<div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">标题</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="TITE" id="TITE" v-model="pd.TITE" maxlength="100" placeholder="这里输入标题" title="标题">
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">讲师</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="LECTURER" id="LECTURER" v-model="pd.LECTURER" maxlength="30" placeholder="这里输入讲师" title="讲师">
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">讲师简介</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="INTRODUCTION" id="INTRODUCTION" v-model="pd.INTRODUCTION" maxlength="200" placeholder="这里输入讲师简介" title="讲师简介">
+		                                </div>
+		                                <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">封面图</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="FILEPATH" id="FILEPATH" v-model="FILEPATH" maxlength="1000" placeholder="请点击右侧的按钮，选择封面图（300x250px）" title="图片" readonly="readonly" v-on:mouseover="showImg(FILEPATH,'yulantu');" v-on:mouseout="hideImg('yulantu');">
+		                                    <div class="yulantu" id="yulantu"></div>
+		                                    <a v-on:click="selectPictures" class="btn btn-light btn-sm" title="选择图片" style="width: 23px;height:30px;margin-top:1px;cursor:pointer;margin-left: 3px;">
+												<i class="feather icon-image" style="margin-top:-6px;margin-left: -6px;"></i>
+											</a>
+											<a v-on:click="FILEPATH = ''" class="btn btn-light btn-sm" title="清除图片" style="width: 23px;height:30px;margin-top:1px;cursor:pointer;margin-left: 3px;">
+												<div style="margin-left: -6px;">清</div>
+											</a>
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">科目</span></span>
+		                                    </div>
+		                                    <select ref="SUBJECT" id="SUBJECT" v-model="SUBJECT"  title="科目" data-placeholder="科目" style="width:819px;padding-left:10px;border: 1px solid #CED4DA;transparent;appearance:none;-moz-appearance:none;-webkit-appearance:none;"></select>
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">课时</span></span>
+		                                    </div>
+		                                    <select ref="CLASSHOUR" id="CLASSHOUR" v-model="CLASSHOUR"  title="课时" data-placeholder="课时" style="width:819px;padding-left:10px;border: 1px solid #CED4DA;transparent;appearance:none;-moz-appearance:none;-webkit-appearance:none;"></select>
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">直播时间</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="CTIME" id="CTIME" v-model="pd.CTIME" maxlength="100" placeholder="这里输入直播时间" title="直播时间">
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">HTTP-FLV</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="HTTPFLV" id="HTTPFLV" v-model="pd.HTTPFLV" maxlength="200" placeholder="这里输入HTTP-FLV" title="HTTP-FLV">
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">M3U8</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="M3U8" id="M3U8" v-model="pd.M3U8" maxlength="200" placeholder="这里输入HLS(m3u8)" title="HLS(m3u8)">
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">RTMP</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="RTMP" id="RTMP" v-model="pd.RTMP" maxlength="200" placeholder="这里输入RTMP" title="RTMP">
+		                                </div>
+							            <div class="input-group input-group-sm mb-3" style="margin-top: -10px;">
+		                                    <div class="input-group-prepend">
+		                                        <span class="input-group-text" style="width: 79px;"><span style="width: 100%;">备注说明</span></span>
+		                                    </div>
+		                                    <input type="text" class="form-control" ref="REMARKS" id="REMARKS" v-model="pd.REMARKS" maxlength="500" placeholder="这里输入备注说明" title="备注说明">
+		                                </div>
+							            <div class="input-group" style="margin-top:10px;background-color: white" >
+							            	<span style="width: 100%;text-align: center;">
+							            		<a class="btn btn-light btn-sm" v-on:click="save">保存</a>
+							            		<a class="btn btn-light btn-sm" onclick="top.Dialog.close()">取消</a>
+							            	</span>
+							            </div>
+							       </div>
+						           <!-- [加载状态 ] start -->
+								    <div id="jiazai" style="display:none;margin-top:50px;">
+								    	<div class="d-flex justify-content-center">
+	                                        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+								    <!-- [ 加载状态  ] End -->
+								</div>
+	    
+                            </div>
+                            <!-- [ Main Content ] end -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- [ 主内容区 ] end -->
+    
+<script type="text/javascript" src="../../../assets/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="../../../assets/js/pre-loader.js"></script>
+<script src="../../../assets/plugins/sweetalert/js/sweetalert.min.js"></script>
+
+<!-- select插件 -->
+<script src="../../../assets/plugins/select2/js/select2.full.min.js"></script>
+<script src="../../../assets/plugins/multi-select/js/jquery.quicksearch.js"></script>
+<script src="../../../assets/plugins/multi-select/js/jquery.multi-select.js"></script>
+<script src="../../../assets/js/pages/form-select-custom.js"></script>
+
+<!-- 表单验证提示 -->
+<script src="../../../assets/js/jquery.tips.js"></script>
+
+<!-- 本页面js -->
+<script type="text/javascript" src="../../../assets/js-v/course/livebroadcast_edit.js"></script>
+
+</body>
+</html>
