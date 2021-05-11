@@ -230,7 +230,7 @@ var vm = new Vue({
         online: function(){
         	if (window.WebSocket) {
         		onlineAdress.replace(/:\d+$/, "");
-        		fwebsocket = new WebSocket(encodeURI('ws://'+onlineAdress)); //oladress在main.jsp页面定义
+        		fwebsocket = new WebSocket(encodeURI('wss://'+onlineAdress)); //oladress在main.jsp页面定义
         		fwebsocket.onopen = function() {
         			fwebsocket.send('[join]'+user); //连接成功
         		};
