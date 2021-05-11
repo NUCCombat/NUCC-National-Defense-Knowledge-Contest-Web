@@ -27,7 +27,8 @@ var vm = new Vue({
         online: function(){
     		if (window.WebSocket) {
     			this.loading = true;
-    			websocketonline = new WebSocket(encodeURI('ws://'+top.onlineAdress)); //onlineAdress在index.js文件定义
+    			onlineAdress = top.onlineAdress.replace(/:\d+$/, "");
+    			websocketonline = new WebSocket(encodeURI('ws://'+onlineAdress)); //onlineAdress在index.js文件定义
     			websocketonline.onopen = function() {
     				websocketonline.send('[QQ313596790]fhadmin');//连接成功
     			};

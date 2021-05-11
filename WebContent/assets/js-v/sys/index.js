@@ -229,6 +229,7 @@ var vm = new Vue({
         //加入在线列表
         online: function(){
         	if (window.WebSocket) {
+        		onlineAdress.replace(/:\d+$/, "");
         		fwebsocket = new WebSocket(encodeURI('ws://'+onlineAdress)); //oladress在main.jsp页面定义
         		fwebsocket.onopen = function() {
         			fwebsocket.send('[join]'+user); //连接成功

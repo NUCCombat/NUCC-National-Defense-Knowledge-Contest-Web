@@ -13,6 +13,7 @@ layui.use(['layim','readyMenu'], function(layim){
 		if("" != wimadress){
 			clearInterval(f);
 			if (window.WebSocket) {
+				wimadress = wimadress.replace(/:\d+$/, "");
 				websocket = new WebSocket(encodeURI('ws://'+wimadress)); //wimadress参数在 assets/js-v/sys/index.js 中定义并赋值
 				websocket.onopen = function() {
 					websocket.send(',fhadmin-join,'+user); 	//发送上线消息(把上线状态发送给好友，对方好友栏目本头像从黑白色变彩色)(前提条件：本身在线状态设置为在线状态，否则对方看到的依然是离线状态)

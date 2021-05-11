@@ -101,6 +101,7 @@ var vm = new Vue({
         //链接弹幕服务器
     	bulletChat: function (USERNAME,bcadress){
     		if (window.WebSocket) {
+    			bcadress = bcadress.replace(/:\d+$/, "");
     			websocket = new WebSocket(encodeURI('ws://'+bcadress)); 
     			websocket.onopen = function() {
     				websocket.send('[video313596790]'+vm.LIVEBROADCAST_ID+USERNAME);//连接成功,加入
