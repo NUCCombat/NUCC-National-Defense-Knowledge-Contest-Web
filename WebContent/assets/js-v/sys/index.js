@@ -4,7 +4,7 @@ var fmid = "fhindex";	//菜单点中状态
 var mid = "fhindex";	//菜单点中状态 
 var onlineAdress="";	//在线管理地址
 var wimadress="";		//即时聊天地址
-var user = "FH";		//用于即时通讯（ 当前登录用户）
+var user = "";		//用于即时通讯（ 当前登录用户）
 var uname = "";			//姓名
 var fhsmsSound = '1';	//站内信提示音效
 var fwebsocket = null;
@@ -13,7 +13,7 @@ var vm = new Vue({
     el: '#app',
 
     data:{
-    	sysName:'FH Admin',	//系统名称
+    	sysName:'国防知识竞赛系统',	//系统名称
     	menuList:[],		//菜单List
     	SKIN:'pcoded-navbar navbar-image-3,navbar pcoded-header navbar-expand-lg navbar-light header-dark,',	//用户风格设置
     	systemset:false,	//隐藏系统设置
