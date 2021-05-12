@@ -27,7 +27,7 @@ var vm = new Vue({
         	//回车发弹幕
             document.onkeydown = function(e) {
             var key = window.event.keyCode;
-            if (key == 13) {
+            if (key === 13) {
                 vm.run_example();
                 }
             }
@@ -45,12 +45,12 @@ var vm = new Vue({
 		    	data: {LIVEBROADCAST_ID:this.LIVEBROADCAST_ID,tm:new Date().getTime()},
 				dataType:"json",
 				success: function(data){
-                     if("success" == data.result){
+                     if("success" === data.result){
                      	vm.pd = data.pd;							//参数map
                      	HTTPFLV = data.pd.HTTPFLV;
                      	M3U8 = data.pd.M3U8;
                      	RTMP = data.pd.RTMP;
-                     }else if ("exception" == data.result){
+                     }else if ("exception" === data.result){
                      	showException("直播课程",data.exception);	//显示异常
                      }
                   }
@@ -71,9 +71,9 @@ var vm = new Vue({
 		    	data: {tm:new Date().getTime()},
 				dataType:"json",
 				success: function(data){
-                     if("success" == data.result){
+                     if("success" === data.result){
                      	vm.bulletChat(data.USERNAME,data.bcadress);
-                     }else if ("exception" == data.result){
+                     }else if ("exception" === data.result){
                      	showException("获取视频弹幕服务信息",data.exception);	//显示异常
                      }
                   }
@@ -84,7 +84,7 @@ var vm = new Vue({
     	
     	//发送弹幕
     	run_example: function(){
-    	    if('' == this.CONTENT || !this.DMKG)return false;
+    	    if('' === this.CONTENT || !this.DMKG)return false;
     	    websocket.send(top.vm.userPhoto+",fh,"+this.LIVEBROADCAST_ID+",fh,"+top.vm.user_name+'：'+this.CONTENT);
     	    this.CONTENT = '';
     	    return false;
@@ -92,7 +92,7 @@ var vm = new Vue({
     	
     	//接收到的弹幕
     	receive_example: function(userPhoto,CONTENT){
-    	    var color = new Array(["AFD8F8"],["F6BD0F"],["8BBA00"],["FF8E46"],["008E8E"],["D64646"],["8E468E"],["588526"],["B3AA00"],["008ED6"],["9D080D"],["A186BE"]);
+    	    var color = [["AFD8F8"],["F6BD0F"],["8BBA00"],["FF8E46"],["008E8E"],["D64646"],["8E468E"],["588526"],["B3AA00"],["008ED6"],["9D080D"],["A186BE"]];
     	    var example_item={'img':userPhoto,'info':CONTENT,'color':'#'+color[this.rnd(0, 11)]};
     	    $('body').barrager(example_item);
     	    return false;
@@ -164,7 +164,7 @@ window.onload=function(){
 }
 	
 function time(){
-	if("" != M3U8){
+	if("" !== M3U8){
 		clearInterval(s);
 		openVideo(M3U8);
 	}
@@ -172,11 +172,11 @@ function time(){
 
 //切换
 function changeUrl(v){
-	if(v == 1){
+	if(v === 1){
 		openVideo(M3U8);
-	}else if(v == 2){
+	}else if(v === 2){
 		openVideo(HTTPFLV);
-	}else if(v == 3){
+	}else if(v === 3){
 		openVideo(RTMP);
 	}
 }
