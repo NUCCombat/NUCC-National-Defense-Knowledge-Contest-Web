@@ -143,8 +143,10 @@ var vm = new Vue({
         			 vm.user_name = data.NAME;							//用户姓名
         			 vm.sysName= data.sysName							//系统名称
         			 onlineAdress = data.onlineAdress;					//在线管理地址
-        			 wimadress= data.wimadress;							//即时聊天地址
-        			 user = data.USERNAME;								//用户名
+        			 onlineAdress = onlineAdress.replace(/:\d+$/, "");
+					 wimadress = data.wimadress;							//即时聊天地址
+        			 wimadress = wimadress.replace(/:\d+$/, "");
+					 user = data.USERNAME;								//用户名
         			 uname = data.NAME;									//用户姓名
         			 vm.online();										//加入在线列表
         			 vm.fhsmsCount = Number(data.fhsmsCount);
