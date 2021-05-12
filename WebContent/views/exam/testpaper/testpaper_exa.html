@@ -154,7 +154,7 @@
 													                	<template v-if="undefined != fdata.FOPTION && fdata.FOPTION.length < 101"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="formatOption(fdata.FOPTION.split(',fh,'),'',index,findex,data.TYPE,compileStr(';B;'+fdata.ANSWER),QID)"></div></template>
 													                	<template v-if="undefined != fdata.FOPTION && fdata.FOPTION.length > 100"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="formatOption(fdata.FOPTION.split(',fh,'),'<br>',index,findex,data.TYPE,compileStr(';B;'+fdata.ANSWER),QID)"></div></template>
 													                	<template v-if="data.TYPE == 'B'"><input type="hidden" v-bind:id="'FIf'+index+findex" value="" /></template>
-													                	<template v-if="data.TYPE == 'C'"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="formatOption('','',index,findex,data.TYPE,compileStr(';B;'+fdata.ANSWER),QID)"></template>
+																		<template v-if="data.TYPE == 'C'"><br><div style="margin-top: 5px;margin-left: 20px;" v-html="formatOption('','',index,findex,data.TYPE,compileStr(';B;'+fdata.ANSWER),QID)"></div></template>>
 													                	<template v-if="data.TYPE == 'D'">
 													                		<br>答：<input @blur="subBig($event,index,findex)" v-bind:name="QID" type="text" maxlength="100" title="多处空格的答案用中文输入法下逗号，隔开" style="width:399px;padding-top:5px;border-left-width:0px;border-top-width:0px;border-right-width:0px;border-bottom: 1px solid #dbdbdb" />
 													                	</template>
